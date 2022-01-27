@@ -1,2 +1,2 @@
-[[]()](https://wow.net)
-[[]()](https://wow.net)
+[[]()](https://something.com)
+[[]()](some-page.html)
