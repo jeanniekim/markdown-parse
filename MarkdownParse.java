@@ -11,12 +11,13 @@ public class MarkdownParse {
         // find the next [, then find the ], then find the (, then take up to
         // the next )
         int currentIndex = 0;
+        // get all (
         while(currentIndex < markdown.lastIndexOf("(")) {
             int openParenIndex = markdown.indexOf("(", currentIndex);
             openParenIndexes.add(openParenIndex);
             currentIndex = openParenIndex + 1;
         }
-
+        // for each (, if the character preceding it is not a ], remove it
         for(int i = 0; i < openParenIndexes.size(); i++){
             if(markdown.charAt(openParenIndexes.get(i) - 1) != ']'){
                 openParenIndexes.remove(i);
@@ -24,9 +25,14 @@ public class MarkdownParse {
             }
         }
 
-
+        // get the links after )
         for(int openParen:openParenIndexes){
-            toReturn.add(markdown.substring(openParen+1, markdown.indexOf(")",openParen)));
+            try {
+                toReturn.add(markdown.substring(openParen+1, markdown.indexOf(")",openParen)));
+            }
+            catch (IndexOutOfBoundsException e){
+                break;
+            }
         }
         return toReturn;
     }
