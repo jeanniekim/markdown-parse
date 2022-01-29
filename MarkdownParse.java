@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class MarkdownParse {
     public static ArrayList<String> getLinks(String markdown) {
@@ -25,17 +26,35 @@ public class MarkdownParse {
             }
         }
 
-        // get the links after )
+        // get the links
         for(int openParen:openParenIndexes){
+            // we checking links now
+            String link = "";
+
             try {
-                toReturn.add(markdown.substring(openParen+1, markdown.indexOf(")",openParen)));
+               link = markdown.substring(openParen+1, markdown.indexOf(")",openParen));
             }
-            catch (IndexOutOfBoundsException e){
-                break;
+            catch (IndexOutOfBoundsException e){}
+
+            // invalid char source: https://tinyurl.com/339ncmvh            
+            String[] invalidLinkChars = {" ", "{", "}", "|", "\\", "^", "~", "[", "]", "`"};
+
+            // note: definition of what makes a "valid link" is kind of arbitrary
+            
+            // https://stackoverflow.com/questions/8992100/test-if-a-string-contains-any-of-the-strings-from-an-array
+            // if valid link (doesn't contain any invalid chars)
+            if (!Arrays.stream(invalidLinkChars).anyMatch(link::contains)){
+                toReturn.add(link);
             }
         }
         return toReturn;
     }
+
+    //https://stackoverflow.com/questions/8992100/test-if-a-string-contains-any-of-the-strings-from-an-array
+    public static boolean stringContainsItemFromList(String inputStr, String[] items) {
+        return Arrays.stream(items).anyMatch(inputStr::contains);
+    }
+
     public static void main(String[] args) throws IOException {
 		Path fileName = Path.of(args[0]);
 	    String contents = Files.readString(fileName);
