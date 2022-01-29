@@ -50,11 +50,6 @@ public class MarkdownParse {
         return toReturn;
     }
 
-    //https://stackoverflow.com/questions/8992100/test-if-a-string-contains-any-of-the-strings-from-an-array
-    public static boolean stringContainsItemFromList(String inputStr, String[] items) {
-        return Arrays.stream(items).anyMatch(inputStr::contains);
-    }
-
     public static void main(String[] args) throws IOException {
 		Path fileName = Path.of(args[0]);
 	    String contents = Files.readString(fileName);
